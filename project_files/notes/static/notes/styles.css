@@ -68,6 +68,26 @@ button {
   gap: 12px;
 }
 
+.note-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.edit-button {
+  display: inline-block;
+  vertical-align: middle;
+  color: #8a8f99;
+  padding: 6px;
+  border-radius: 6px;
+  line-height: 0;
+}
+
+.edit-button:hover,
+.edit-button:focus {
+  color: #fff;
+  background-color: #2980b9;
+}
+
 .trash-button {
   color: #8a8f99;
   padding: 6px;

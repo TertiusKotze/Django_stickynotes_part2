@@ -11,6 +11,15 @@
         <li class="note-item">
           <div class="note-header">
             <h3><a href="{% url 'note_detail' pk=note.pk %}">{{ note.title }}</a></h3>
+            <div class="note-actions">
+            <a class="edit-button"
+               href="{% url 'note_update' pk=note.pk %}"
+               title="Edit note"
+               aria-label="Edit note {{ note.title }}">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+            </a>
             <a class="trash-button"
                href="{% url 'note_delete' pk=note.pk %}"
                data-delete-url="{% url 'note_delete' pk=note.pk %}"
@@ -21,6 +30,7 @@
                 <path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v8h2v-8h-2zm4 0v8h2v-8h-2z"/>
               </svg>
             </a>
+            </div>
           </div>
           <p>{{ note.content|truncatechars:180 }}</p>
           <small>Created: {{ note.created_at|date:"Y-m-d H:i" }}</small>

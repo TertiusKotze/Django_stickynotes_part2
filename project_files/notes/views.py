@@ -42,6 +42,30 @@ def note_update(request, pk):
 
 
 def note_delete(request, pk):
+    """Delete a sticky note after confirmation (UC5 - Delete a note).
+
+    Reached from the trash can icon. A note is only deleted on POST, so
+    simply visiting the URL (for example via a link or a web crawler)
+    can never remove data.
+
+    * **GET** - renders ``notes/note_confirm_delete.html`` asking the
+      user to confirm. The detail page uses this, and so does the list
+      page if the browser does not support the ``<dialog>`` pop-up.
+    * **POST** - permanently deletes the note and redirects to the note
+      list. The list page's pop-up sends this POST directly.
+
+    Args:
+        request (HttpRequest): The incoming HTTP request.
+        pk (int): Primary key of the note to delete, captured from the URL.
+
+    Returns:
+        HttpResponse: A redirect to ``note_list`` after deletion, or the
+        rendered confirmation page with ``note`` in context.
+
+    Raises:
+        Http404: If no note with the given ``pk`` exists.
+    """
+
     note = get_object_or_404(Note, pk=pk)
     if request.method == "POST":
         note.delete()
