@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Sticky Notes - {{ page_title }}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{{ page_title }}</h2>
+  <p><a class="button-link" href="{% url 'note_create' %}">Add Note</a></p>
+
+  {% if notes %}
+    <ul class="note-list">
+      {% for note in notes %}
+        <li class="note-item">
+          <div class="note-header">
+            <h3><a href="{% url 'note_detail' pk=note.pk %}">{{ note.title }}</a></h3>
+            <a class="trash-button"
+               href="{% url 'note_delete' pk=note.pk %}"
+               data-delete-url="{% url 'note_delete' pk=note.pk %}"
+               data-note-title="{{ note.title }}"
+               title="Delete note"
+               aria-label="Delete note {{ note.title }}">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path fill="currentColor" d="M9 3h6l1 2h4v2H4V5h4l1-2zm-3 6h12l-1 12H7L6 9zm4 2v8h2v-8h-2zm4 0v8h2v-8h-2z"/>
+              </svg>
+            </a>
+          </div>
+          <p>{{ note.content|truncatechars:180 }}</p>
+          <small>Created: {{ note.created_at|date:"Y-m-d H:i" }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No notes yet. Create your first sticky note.</p>
+  {% endif %}
+</section>
+
+<dialog id="delete-dialog" class="modal">
+  <form id="delete-form" method="post" action="">
+    {% csrf_token %}
+    <h3>Delete note?</h3>
+    <p>Are you sure you want to delete "<strong id="delete-note-title"></strong>"? This cannot be undone.</p>
+    <div class="modal-actions">
+      <button type="button" id="delete-cancel">Cancel</button>
+      <button type="submit" class="danger">Delete</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  (function () {
+    const dialog = document.getElementById("delete-dialog");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+    const form = document.getElementById("delete-form");
+    const titleEl = document.getElementById("delete-note-title");
+
+    document.querySelectorAll(".trash-button").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        form.action = btn.dataset.deleteUrl;
+        titleEl.textContent = btn.dataset.noteTitle;
+        dialog.showModal();
+      });
+    });
+
+    document.getElementById("delete-cancel").addEventListener("click", function () {
+      dialog.close();
+    });
+
+    dialog.addEventListener("click", function (event) {
+      if (event.target === dialog) dialog.close();
+    });
+  })();
+</script>
+{% endblock %}
+

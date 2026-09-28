@@ -1,0 +1,3 @@
+GitHub repository for the Sticky Notes application:
+https://github.com/TertiusKotze/Django_stickynotes_part2
+
